@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -5,7 +6,6 @@ using MinhaWebApiComRedis.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
 
 namespace MinhaWebApiComRedis
 {
@@ -20,15 +20,15 @@ namespace MinhaWebApiComRedis
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApiContext>(x => x.UseInMemoryDatabase("PrevisoesDoTempoDb"));
+            services.AddDbContext<ApiContext>(x => x.UseInMemoryDatabase("CotacoesDb"));
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "API de previsão do tempo",
+                    Title = "API de cotações",
                     Version = "v1",
-                    Description = "API de previsão do tempo com banco de dados em memória e cache no Redis"
+                    Description = "API de busca de cotações com banco de dados em memória e cache no Redis"
                 });
             });
 
@@ -40,7 +40,7 @@ namespace MinhaWebApiComRedis
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API de previsão do tempo - v1"));
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API de cotações - v1"));
 
             if (env.IsDevelopment())
             {
