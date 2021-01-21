@@ -7,6 +7,8 @@ namespace MinhaWebApiComRedis.GraphQL.Types
     {
         public CotacoesMoedasType()
         {
+            Name = "cotacoes";
+
             Field(x => x.Id, type: typeof(IdGraphType))
                 .Description("Id da entidade CotacoesMoedas");
 
