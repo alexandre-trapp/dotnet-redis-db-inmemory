@@ -1,11 +1,15 @@
+using GraphQL.Server;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using MinhaWebApiComRedis.Database;
+using GraphQL.Server.Ui.Playground;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MinhaWebApiComRedis.GraphQL.Schemes;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace MinhaWebApiComRedis
 {
@@ -38,6 +42,14 @@ namespace MinhaWebApiComRedis
                 options.InstanceName = "ApiCotacoesMoedas";
             });
 
+            services.AddScoped<ApiScheme>();
+
+            services.AddGraphQL(o => {
+                o.EnableMetrics = true;
+                o.UnhandledExceptionDelegate = ctx => { Console.WriteLine(ctx.OriginalException); };
+            })
+            .AddGraphTypes(typeof(ApiScheme), ServiceLifetime.Scoped);
+
             services.AddControllers();
         }
 
@@ -58,6 +70,9 @@ namespace MinhaWebApiComRedis
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseGraphQL<ApiScheme>();
+            app.UseGraphQLPlayground(options: new GraphQLPlaygroundOptions());
 
             app.UseEndpoints(endpoints =>
             {
