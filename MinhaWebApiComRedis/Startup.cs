@@ -32,6 +32,12 @@ namespace MinhaWebApiComRedis
                 });
             });
 
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetConnectionString("ConexaoRedis");
+                options.InstanceName = "ApiCotacoesMoedas";
+            });
+
             services.AddControllers();
         }
 
